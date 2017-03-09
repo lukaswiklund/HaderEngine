@@ -1,13 +1,11 @@
 package se.wiklund.haderengine.graphics;
 
 import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
 import se.wiklund.haderengine.Main;
+import se.wiklund.haderengine.input.Keyboard;
 
 public class Window {
 	
@@ -16,10 +14,17 @@ public class Window {
 	private JFrame frame;
 	private Canvas screen;
 	
-	public Window(String title, boolean fullscreen) {
+	public Window(String title, boolean fullscreen, Batch batch) {
 		this.title = title;
 		this.fullscreen = fullscreen;
 		
+		createWindow();
+		batch.setWindow(this);
+	}
+	
+	public void setFullscreen(boolean fullscreen) {
+		this.fullscreen = fullscreen;
+		frame.dispose();
 		createWindow();
 	}
 	
@@ -28,8 +33,9 @@ public class Window {
 		screen = new Canvas();
 		
 		if (fullscreen) {
-			screen.setSize(Main.SCREEN_SIZE);
+			frame.setSize(Main.SCREEN_SIZE);
 			frame.setUndecorated(true);
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		} else {
 			int width = Main.SCREEN_SIZE.width / 2;
 			screen.setSize(width, width / 16 * 9);
@@ -45,20 +51,8 @@ public class Window {
 		
 		frame.requestFocus();
 		screen.requestFocusInWindow();
-	}
-	
-	public void render() {
-		BufferStrategy bs = screen.getBufferStrategy();
-		if (bs == null) {
-			screen.createBufferStrategy(2);
-			return;
-		}
 		
-		Graphics g = bs.getDrawGraphics();
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, frame.getWidth(), frame.getHeight());
-		
-		bs.show();
+		screen.addKeyListener(new Keyboard());
 	}
 	
 	public void setTitle(String title) {
@@ -72,5 +66,21 @@ public class Window {
 	public void setTitleSuffix(String suffix) {
 		this.suffix = suffix;
 		setTitle(title);
+	}
+	
+	public Canvas getScreen() {
+		return screen;
+	}
+	
+	public int getWidth() {
+		return frame.getWidth();
+	}
+	
+	public int getHeight() {
+		return frame.getHeight();
+	}
+	
+	public boolean isFullscreen() {
+		return fullscreen;
 	}
 }

@@ -1,10 +1,31 @@
 package se.wiklund.haderengine;
 
+import se.wiklund.haderengine.graphics.Texture;
+import se.wiklund.haderengine.maths.Transform;
+
 public class Instance {
 	
-	private Bounds bounds;
+	private Texture texture;
+	private Transform transform;
 	
-	public Instance() {
-		
+	public Instance(Texture texture, float x, float y) {
+		this(texture, x, y, texture.getWidth(), texture.getHeight());
+	}
+	
+	public Instance(Texture texture, float x, float y, int width, int height) {
+		this.texture = texture;
+		this.transform = new Transform(x, y, width, height);
+	}
+	
+	public Texture getTexture() {
+		return texture;
+	}
+	
+	public void move(float dx, float dy) {
+		transform.move(dx, dy);
+	}
+	
+	public Transform getTransform() {
+		return transform;
 	}
 }
