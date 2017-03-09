@@ -1,11 +1,12 @@
 package se.wiklund.haderengine;
 
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import com.sun.glass.events.KeyEvent;
-
-import se.wiklund.haderengine.graphics.Batch;
+import se.wiklund.haderengine.graphics.Renderer;
 import se.wiklund.haderengine.graphics.Texture;
 import se.wiklund.haderengine.graphics.Window;
 import se.wiklund.haderengine.input.Keyboard;
@@ -14,80 +15,63 @@ public class Main {
 	
 	public static final int WIDTH = 1920 / 2, HEIGHT = 1080 / 2;
 	public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-	private static final int UPS = 60;
 	
-	public static Batch batch;
 	public static Window window;
-	private boolean running;
-	private int fps, ups;
-	private Instance instance;
+	private static Instance instance;
 	
-	public void start() {
-		if (running) {
-			System.err.println("Tried to start the game while running!");
-			return;
-		}
-		running = true;
+	public static void start() {
+		instance = new Instance(new Texture("/bird.png"), 0, 0);
 		
-		final double UPDATE_INTERVAL = 1000000000.0 / UPS;
 		long lastTime = System.nanoTime();
-		long timer = System.nanoTime();
-		double delta = 0;
-		int frames = 0;
-		int updates = 0;
 		
-		Texture texture = new Texture(100, 100);
-		instance = new Instance(texture, 200, 200);
-		
-		while (running) {
+		while (!window.isCloseRequested()) {
 			long now = System.nanoTime();
-			delta += now - lastTime;
+			double delta = now - lastTime;
 			lastTime = now;
 			
-			while (delta >= UPDATE_INTERVAL) {
-				delta -= UPDATE_INTERVAL;
-				
-				update(UPDATE_INTERVAL);
-				updates++;
-			}
+			update(delta);
+			
+			glClear(GL_COLOR_BUFFER_BIT);
 			
 			render();
-			frames++;
 			
-			if (timer + 1000000000 <= System.nanoTime()) {
-				timer += 1000000000;
-				fps = frames;
-				ups = updates;
-				frames = 0;
-				updates = 0;
-				
-				window.setTitleSuffix("UPS: " + ups + ", FPS: " + fps);
-			}
+			window.repaint();
 		}
 		
-		stop();
+		exit();
 	}
 	
-	private void update(double delta) {
-		if (Keyboard.isKeyDown(KeyEvent.VK_ALT) && Keyboard.isKeyPressed(KeyEvent.VK_ENTER)) {
+	private static void update(double delta) {
+		if (Keyboard.isKeyDown(GLFW_KEY_LEFT_ALT) && Keyboard.isKeyPressed(GLFW_KEY_ENTER)) {
 			window.setFullscreen(!window.isFullscreen());
 		}
 	}
 	
-	private void render() {
-		batch.render(instance);
-		
-		batch.renderToScreen();
+	private static void render() {
+		Renderer.render(instance);
 	}
 	
-	private void stop() {
-		System.exit(0);
+	public static void exit() {
+		exit(0);
+	}
+	
+	public static void exit(int code) {
+		if (window != null)
+			window.close();
+		glfwTerminate();
+		if (code != 0)
+			System.out.println("Stopped with exit code " + code + "!");
+		System.exit(code);
 	}
 	
 	public static void main(String[] args) {
-		batch = new Batch();
-		window = new Window("HaderEngine", false, batch);
+		if (!glfwInit()) {
+			System.err.println("Failed to initialize GLFW!");
+			exit(-1);
+			return;
+		}
+		window = new Window("HaderEngine", false);
 		
-		new Thread(() -> new Main().start()).start();
+		start();
 	}
 }

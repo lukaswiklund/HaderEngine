@@ -1,8 +1,11 @@
 package se.wiklund.haderengine.graphics;
 
-import java.awt.Canvas;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
 
-import javax.swing.JFrame;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
+import org.lwjgl.opengl.GL;
 
 import se.wiklund.haderengine.Main;
 import se.wiklund.haderengine.input.Keyboard;
@@ -11,56 +14,73 @@ public class Window {
 	
 	private String title, suffix;
 	private boolean fullscreen;
-	private JFrame frame;
-	private Canvas screen;
+	private long windowID;
 	
-	public Window(String title, boolean fullscreen, Batch batch) {
+	public Window(String title, boolean fullscreen) {
 		this.title = title;
 		this.fullscreen = fullscreen;
 		
-		createWindow();
-		batch.setWindow(this);
+		createWindow(0);
 	}
 	
 	public void setFullscreen(boolean fullscreen) {
 		this.fullscreen = fullscreen;
-		frame.dispose();
-		createWindow();
+		createWindow(windowID);
 	}
 	
-	private void createWindow() {
-		frame = new JFrame();
-		screen = new Canvas();
-		
+	private void createWindow(long oldID) {
+		int width = Main.SCREEN_SIZE.width;
+		int height = Main.SCREEN_SIZE.height;
+		long monitor = 0;
 		if (fullscreen) {
-			frame.setSize(Main.SCREEN_SIZE);
-			frame.setUndecorated(true);
-			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			monitor = glfwGetPrimaryMonitor();
 		} else {
-			int width = Main.SCREEN_SIZE.width / 2;
-			screen.setSize(width, width / 16 * 9);
+			height /= 2;
+			width = height * 16 / 9;
 		}
 		
-		setTitle(title);
-		frame.add(screen);
-		frame.pack();
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		windowID = glfwCreateWindow(width, height, title, monitor, oldID);
+		if (oldID != 0) {
+			glfwDestroyWindow(oldID);
+		}
+		if (windowID == 0) {
+			System.err.println("Failed to create window!");
+			Main.exit(-1);
+			return;
+		}
 		
-		frame.requestFocus();
-		screen.requestFocusInWindow();
+		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		glfwSetWindowPos(windowID, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2);
 		
-		screen.addKeyListener(new Keyboard());
+		glfwMakeContextCurrent(windowID);
+		
+		glfwSetWindowSizeCallback(windowID, new GLFWWindowSizeCallback() {
+			@Override
+			public void invoke(long windowID, int width, int height) {
+				glViewport(0, 0, width, height);
+			}
+		});
+		
+		glfwSetKeyCallback(windowID, new Keyboard());
+		
+		GL.createCapabilities();
+		
+		glfwSwapInterval(0);
+		
+		glOrtho(0, 1920, 0, 1080, 1, -1);
+		glClearColor(0, 0, 0, 0);
+		
+		glEnable(GL_TEXTURE_2D);
+	}
+	
+	public void repaint() {
+		glfwSwapBuffers(windowID);
+		glfwPollEvents();
 	}
 	
 	public void setTitle(String title) {
 		this.title = title;
-		if (suffix == null || suffix.trim().equalsIgnoreCase(""))
-			frame.setTitle(title);
-		else
-			frame.setTitle(title + " | " + suffix);
+		if (suffix == null || suffix.trim().equalsIgnoreCase(""));
 	}
 	
 	public void setTitleSuffix(String suffix) {
@@ -68,16 +88,14 @@ public class Window {
 		setTitle(title);
 	}
 	
-	public Canvas getScreen() {
-		return screen;
+	public void close() {
+		if (windowID != 0) {
+			glfwDestroyWindow(windowID);
+		}
 	}
 	
-	public int getWidth() {
-		return frame.getWidth();
-	}
-	
-	public int getHeight() {
-		return frame.getHeight();
+	public boolean isCloseRequested() {
+		return glfwWindowShouldClose(windowID);
 	}
 	
 	public boolean isFullscreen() {

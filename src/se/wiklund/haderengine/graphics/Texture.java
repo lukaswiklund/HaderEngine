@@ -1,76 +1,48 @@
 package se.wiklund.haderengine.graphics;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 import se.wiklund.haderengine.util.Loader;
 
 public class Texture {
-
+	
+	private int textureID;
 	private int width, height;
-	private int[] pixels;
-
-	public Texture(int width, int height) {
-		this.width = width;
-		this.height = height;
-		this.pixels = new int[width * height];
-	}
-
+	
 	public Texture(String path) {
+		int[] pixels = null;
 		BufferedImage image = Loader.loadImage(path);
 		width = image.getWidth();
 		height = image.getHeight();
-		pixels = image.getRGB(0, 0, width, height, null, 0, width);
-	}
-	
-	public Texture(int[] pixels, int width, int height) {
-		this.width = width;
-		this.height = height;
-		this.pixels = pixels;
-	}
-
-	public void draw(int color, int x, int y) {
-		if (x < 0 || x >= width || y < 0 || y >= height)
-			return;
-		pixels[x + y * width] = color;
-	}
-	
-	public void fillRect(int color, int x, int y, int width, int height) {
-		for (int ya = 0; ya < height; ya++) {
-			for (int xa = 0; xa < width; xa++) {
-				draw(color, x + xa, y + ya);
-			}
+		pixels = new int[width * height];
+		image.getRGB(0, 0, width, height, pixels, 0, width);
+		
+		int[] data = new int[width * height];
+		for (int i = 0; i < width * height; i++) {
+			int a = (pixels[i] & 0xff000000) >> 24;
+			int r = (pixels[i] & 0xff0000) >> 16;
+			int g = (pixels[i] & 0xff00) >> 8;
+			int b = (pixels[i] & 0xff);
+			
+			data[i] = a << 24 | b << 16 | g << 8 | r;
 		}
+		
+		textureID = glGenTextures();
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	
-	public void render(Texture parent, int x, int y) {
-		for (int ya = 0; ya < height; ya++) {
-			for (int xa = 0; xa < width; xa++) {
-				parent.draw(getPixel(xa, ya), x + xa, y + ya);
-			}
-		}
+	public void bind() {
+		glBindTexture(GL_TEXTURE_2D, textureID);
 	}
 	
-	public void render(Texture parent, int x, int y, int width, int height) {
-		if (this.width == width && this.height == height) {
-			render(parent, x, y);
-			return;
-		}
-		double scaleX = (double) width / this.width;
-		double scaleY = (double) height / this.height;
-		for (int ya = 0; ya < height; ya++) {
-			for (int xa = 0; xa < width; xa++) {
-				parent.draw(getPixel((int) (xa / scaleX), (int) (ya / scaleY)), x + xa, y + ya);
-			}
-		}
-	}
-	
-	public void fill(int color) {
-		Arrays.fill(pixels, color);
-	}
-
-	public int getPixel(int x, int y) {
-		return pixels[x + y * width];
+	public void unbind() {
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	
 	public int getWidth() {
