@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.util.ArrayList;
-import java.util.List;
 
 import se.wiklund.haderengine.Instance;
 import se.wiklund.haderengine.Main;
@@ -13,7 +11,6 @@ import se.wiklund.haderengine.maths.Transform;
 
 public class Batch {
 	
-	private List<Instance> instances = new ArrayList<>();
 	private BufferedImage image = new BufferedImage(Main.WIDTH, Main.HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private Texture screen = new Texture(((DataBufferInt) image.getRaster().getDataBuffer()).getData(), Main.WIDTH, Main.HEIGHT);
 	private Window window;
@@ -23,7 +20,17 @@ public class Batch {
 	}
 	
 	public void render(Instance instance) {
-		instances.add(instance);
+		Texture texture = instance.getTexture();
+		Transform transform = instance.getTransform();
+		render(texture, transform.getX(), transform.getY(), transform.getWidth(), transform.getHeight());
+	}
+	
+	public void render(Texture texture, float x, float y) {
+		render(texture, x, y, texture.getWidth(), texture.getHeight());
+	}
+	
+	public void render(Texture texture, float x, float y, int width, int height) {
+		texture.render(screen, (int) x, (int) y, width, height);
 	}
 	
 	public void renderToScreen() {
@@ -35,19 +42,11 @@ public class Batch {
 		
 		Graphics g = bs.getDrawGraphics();
 		
-		screen.fill(0xFFFFFF);
-		
-		for (Instance instance : instances) {
-			Texture texture = instance.getTexture();
-			Transform transform = instance.getTransform();
-			texture.render(screen, (int) transform.getX(), (int) transform.getY(), transform.getWidth(), transform.getHeight());
-		}
-		
 		g.drawImage(image, 0, 0, window.getWidth(), window.getHeight(), null);
 		
 		bs.show();
 		g.dispose();
 		
-		instances.clear();
+		screen.fill(0xFFFFFF);
 	}
 }
