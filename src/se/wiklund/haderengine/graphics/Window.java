@@ -7,8 +7,10 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 
-import se.wiklund.haderengine.Main;
+import se.wiklund.haderengine.Engine;
+import se.wiklund.haderengine.input.Cursor;
 import se.wiklund.haderengine.input.Keyboard;
+import se.wiklund.haderengine.input.Mouse;
 
 public class Window {
 	
@@ -29,8 +31,8 @@ public class Window {
 	}
 	
 	private void createWindow(long oldID) {
-		int width = Main.SCREEN_SIZE.width;
-		int height = Main.SCREEN_SIZE.height;
+		int width = Engine.SCREEN_SIZE.width;
+		int height = Engine.SCREEN_SIZE.height;
 		long monitor = 0;
 		if (fullscreen) {
 			monitor = glfwGetPrimaryMonitor();
@@ -45,7 +47,6 @@ public class Window {
 		}
 		if (windowID == 0) {
 			System.err.println("Failed to create window!");
-			Main.exit(-1);
 			return;
 		}
 		
@@ -62,12 +63,14 @@ public class Window {
 		});
 		
 		glfwSetKeyCallback(windowID, new Keyboard());
+		glfwSetCursorPosCallback(windowID, new Cursor());
+		glfwSetMouseButtonCallback(windowID, new Mouse());
 		
 		GL.createCapabilities();
 		
-		glfwSwapInterval(0);
+		glfwSwapInterval(1);
 		
-		glOrtho(0, 1920, 0, 1080, 1, -1);
+		glOrtho(0, Engine.WIDTH, 0, Engine.HEIGHT, 1, -1);
 		glClearColor(0, 0, 0, 0);
 		
 		glEnable(GL_TEXTURE_2D);
@@ -80,7 +83,11 @@ public class Window {
 	
 	public void setTitle(String title) {
 		this.title = title;
-		if (suffix == null || suffix.trim().equalsIgnoreCase(""));
+		if (suffix == null || suffix.trim().equalsIgnoreCase("")) {
+			glfwSetWindowTitle(windowID, title);
+		} else {
+			glfwSetWindowTitle(windowID, title + " | " + suffix);
+		}
 	}
 	
 	public void setTitleSuffix(String suffix) {
