@@ -56,4 +56,8 @@ public class Transform {
 	public int getHeight() {
 		return height;
 	}
+	
+	public boolean intersects(Transform transform) {
+		return (x >= transform.x && x <= transform.x + transform.width && y >= transform.y && y <= transform.y + transform.height);
+	}
 }
