@@ -6,6 +6,7 @@ import java.util.List;
 import se.wiklund.haderengine.graphics.Texture;
 import se.wiklund.haderengine.graphics.UIFont;
 import se.wiklund.haderengine.input.Cursor;
+import se.wiklund.haderengine.input.Mouse;
 import se.wiklund.haderengine.input.MouseButtonListener;
 import se.wiklund.haderengine.ui.listener.UIButtonListener;
 
@@ -27,6 +28,8 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 		this.textWidth = font.getTextWidth(text, fontSize);
 		this.textOffsetX = (width - textWidth) / 2;
 		this.textOffsetY = (height - fontSize) / 2;
+		
+		Mouse.addMouseButtonListener(this);
 	}
 	
 	@Override
