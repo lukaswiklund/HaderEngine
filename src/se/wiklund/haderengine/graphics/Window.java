@@ -11,6 +11,7 @@ import se.wiklund.haderengine.Engine;
 import se.wiklund.haderengine.input.Cursor;
 import se.wiklund.haderengine.input.Keyboard;
 import se.wiklund.haderengine.input.Mouse;
+import se.wiklund.haderengine.input.Scroll;
 
 public class Window {
 	
@@ -65,6 +66,7 @@ public class Window {
 		glfwSetKeyCallback(windowID, new Keyboard());
 		glfwSetCursorPosCallback(windowID, new Cursor());
 		glfwSetMouseButtonCallback(windowID, new Mouse());
+		glfwSetScrollCallback(windowID, new Scroll());
 		
 		GL.createCapabilities();
 		

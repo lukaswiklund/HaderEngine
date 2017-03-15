@@ -25,6 +25,10 @@ public class Mouse extends GLFWMouseButtonCallback {
 	}
 	
 	public static void addMouseButtonListener(MouseButtonListener listener) {
+		if (listeners.contains(listener)) {
+			System.err.println("Tried to add a MouseButtonListener that already exists!");
+			return;
+		}
 		listeners.add(listener);
 	}
 	
