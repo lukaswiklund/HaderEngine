@@ -3,6 +3,8 @@ package se.wiklund.haderengine.graphics;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
+import java.util.HashMap;
+
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
@@ -15,9 +17,12 @@ import se.wiklund.haderengine.input.Scroll;
 
 public class Window {
 	
+	private static HashMap<Long, Window> windows = new HashMap<>();
+	
 	private String title, suffix;
 	private boolean fullscreen;
 	private long windowID;
+	private int width, height;
 	
 	public Window(String title, boolean fullscreen) {
 		this.title = title;
@@ -32,8 +37,8 @@ public class Window {
 	}
 	
 	private void createWindow(long oldID) {
-		int width = Engine.SCREEN_SIZE.width;
-		int height = Engine.SCREEN_SIZE.height;
+		width = Engine.SCREEN_SIZE.width;
+		height = Engine.SCREEN_SIZE.height;
 		long monitor = 0;
 		if (fullscreen) {
 			monitor = glfwGetPrimaryMonitor();
@@ -47,9 +52,11 @@ public class Window {
 			glfwDestroyWindow(oldID);
 		}
 		if (windowID == 0) {
-			System.err.println("Failed to create window!");
+			System.err.println(Engine.NAME_PREFIX + "Failed to create window!");
 			return;
 		}
+		
+		windows.put(windowID, this);
 		
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(windowID, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2);
@@ -60,11 +67,18 @@ public class Window {
 			@Override
 			public void invoke(long windowID, int width, int height) {
 				glViewport(0, 0, width, height);
+				if (windows.get(windowID) == null) {
+					System.err.println(Engine.NAME_PREFIX + "Windows list does not contain window ID: " + windowID + "!");
+					return;
+				}
+				Window window = windows.get(windowID);
+				window.width = width;
+				window.height = height;
 			}
 		});
 		
 		glfwSetKeyCallback(windowID, new Keyboard());
-		glfwSetCursorPosCallback(windowID, new Cursor());
+		glfwSetCursorPosCallback(windowID, new Cursor(this));
 		glfwSetMouseButtonCallback(windowID, new Mouse());
 		glfwSetScrollCallback(windowID, new Scroll());
 		
@@ -112,5 +126,13 @@ public class Window {
 	
 	public boolean isFullscreen() {
 		return fullscreen;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 }

@@ -13,6 +13,8 @@ public class Engine {
 	
 	public static final int WIDTH = 1920, HEIGHT = 1080;
 	public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+	public static final String NAME = "HaderEngine";
+	public static final String NAME_PREFIX = "[" + NAME + "] ";
 	
 	public Window window;
 	private GameStateManager gsm;

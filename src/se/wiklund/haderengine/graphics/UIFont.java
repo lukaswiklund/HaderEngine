@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import se.wiklund.haderengine.Engine;
 import se.wiklund.haderengine.util.Loader;
 
 public class UIFont {
@@ -59,12 +60,12 @@ public class UIFont {
 		int charwidth = fontMetrics.charWidth(character) + 8;
 
 		if (charwidth <= 8) {
-			System.err.println("Character width of " + character + " is less than 1!");
+			System.err.println(Engine.NAME_PREFIX + "Character width of " + character + " is less than 1!");
 			charwidth = 7;
 		}
 		int charheight = fontMetrics.getHeight();
 		if (charheight <= 0) {
-			System.err.println("Character height of " + character + " is less than 1!");
+			System.err.println(Engine.NAME_PREFIX + "Character height of " + character + " is less than 1!");
 			charheight = 16;
 		}
 

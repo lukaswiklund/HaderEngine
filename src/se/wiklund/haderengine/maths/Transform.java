@@ -74,17 +74,17 @@ public class Transform {
 	}
 	
 	public boolean intersects(Transform transform) {
-		int tw = this.width;
-        int th = this.height;
-        int rw = transform.width;
-        int rh = transform.height;
+		float tw = this.width;
+		float th = this.height;
+		float rw = transform.width;
+		float rh = transform.height;
         if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
             return false;
         }
-        int tx = (int) this.x;
-        int ty = (int) this.y;
-        int rx = (int) transform.x;
-        int ry = (int) transform.y;
+        float tx = this.x;
+        float ty = this.y;
+        float rx = transform.x;
+        float ry = transform.y;
         rw += rx;
         rh += ry;
         tw += tx;
