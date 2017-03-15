@@ -13,7 +13,6 @@ public class Transform {
 	}
 	
 	public Transform(float x, float y, int width, int height) {
-		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -41,6 +40,13 @@ public class Transform {
 		this.height = height;
 	}
 	
+	public void set(float x, float y, int width, int height) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+	
 	public float getX() {
 		return x;
 	}
@@ -58,6 +64,29 @@ public class Transform {
 	}
 	
 	public boolean intersects(Transform transform) {
-		return (x >= transform.x && x <= transform.x + transform.width && y >= transform.y && y <= transform.y + transform.height);
+		int tw = this.width;
+        int th = this.height;
+        int rw = transform.width;
+        int rh = transform.height;
+        if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
+            return false;
+        }
+        int tx = (int) this.x;
+        int ty = (int) this.y;
+        int rx = (int) transform.x;
+        int ry = (int) transform.y;
+        rw += rx;
+        rh += ry;
+        tw += tx;
+        th += ty;
+        return ((rw < rx || rw > tx) &&
+                (rh < ry || rh > ty) &&
+                (tw < tx || tw > rx) &&
+                (th < ty || th > ry));
+	}
+	
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ", " + width + ", " + height + ")";
 	}
 }

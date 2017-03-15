@@ -32,7 +32,7 @@ public class Engine {
 		
 		while (!window.isCloseRequested()) {
 			long now = System.nanoTime();
-			double delta = now - lastTime;
+			double delta = (now - lastTime) / 1000000000D;
 			lastTime = now;
 			
 			update(delta);
