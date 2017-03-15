@@ -1,5 +1,7 @@
 package se.wiklund.haderengine.util;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -11,6 +13,15 @@ public class Loader {
 		try {
 			return ImageIO.read(Loader.class.getResource(path));
 		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Font loadAWTFont(String path) {
+		try {
+			return Font.createFont(Font.TRUETYPE_FONT, Loader.class.getResourceAsStream(path));
+		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 			return null;
 		}

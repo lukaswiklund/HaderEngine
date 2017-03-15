@@ -40,6 +40,16 @@ public class Transform {
 		this.height = height;
 	}
 	
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
+	
 	public void set(float x, float y, int width, int height) {
 		this.x = x;
 		this.y = y;
