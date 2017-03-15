@@ -21,12 +21,14 @@ public class Window {
 	
 	private String title, suffix;
 	private boolean fullscreen;
+	private boolean vSync;
 	private long windowID;
 	private int width, height;
 	
-	public Window(String title, boolean fullscreen) {
+	public Window(String title, boolean fullscreen, boolean vSync) {
 		this.title = title;
 		this.fullscreen = fullscreen;
+		this.vSync = vSync;
 		
 		createWindow(0);
 	}
@@ -84,7 +86,7 @@ public class Window {
 		
 		GL.createCapabilities();
 		
-		glfwSwapInterval(1);
+		glfwSwapInterval(vSync ? 1 : 0);
 		
 		glOrtho(0, Engine.WIDTH, 0, Engine.HEIGHT, 1, -1);
 		glClearColor(0, 0, 0, 0);
@@ -134,5 +136,14 @@ public class Window {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public boolean isvSync() {
+		return vSync;
+	}
+	
+	public void setvSync(boolean vSync) {
+		this.vSync = vSync;
+		glfwSwapInterval(vSync ? 1 : 0);
 	}
 }

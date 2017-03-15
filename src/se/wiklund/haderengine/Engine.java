@@ -19,13 +19,13 @@ public class Engine {
 	public Window window;
 	private GameStateManager gsm;
 	
-	public Engine() {
+	public Engine(String title, boolean fullscreen, boolean vSync) {
 		if (!glfwInit()) {
 			System.err.println("Failed to initialize GLFW!");
 			exit(-1);
 			return;
 		}
-		window = new Window("HaderEngine", false);
+		window = new Window(title, fullscreen, vSync);
 		gsm = new GameStateManager();
 	}
 	
