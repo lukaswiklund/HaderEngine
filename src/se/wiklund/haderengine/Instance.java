@@ -39,4 +39,11 @@ public class Instance {
 	public Transform getTransform() {
 		return transform;
 	}
+	
+	public void setTexture(Texture texture, boolean keepTransform) {
+		this.texture = texture;
+		if (!keepTransform) {
+			transform.setSize(texture.getWidth(), texture.getHeight());
+		}
+	}
 }

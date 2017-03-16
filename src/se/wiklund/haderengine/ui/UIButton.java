@@ -35,7 +35,7 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 	@Override
 	public void render() {
 		super.render();
-		font.renderText(text, getTransform().getX() + textOffsetX, getTransform().getY() + textOffsetY, fontSize);
+		font.renderText(text, fontSize, getTransform().getX() + textOffsetX, getTransform().getY() + textOffsetY);
 	}
 	
 	public void addButtonListener(UIButtonListener listener) {

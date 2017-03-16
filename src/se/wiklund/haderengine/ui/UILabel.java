@@ -20,7 +20,7 @@ public class UILabel extends UIComponent {
 	
 	@Override
 	public void render() {
-		font.renderText(text, getTransform().getX(), getTransform().getY(), getTransform().getHeight());
+		font.renderText(text, getTransform().getHeight(), getTransform().getX(), getTransform().getY());
 	}
 
 	public String getText() {

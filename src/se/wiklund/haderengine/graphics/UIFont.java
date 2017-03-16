@@ -34,7 +34,7 @@ public class UIFont {
 		this.antiAliased = antiAliased;
 	}
 	
-	public void renderText(String text, float x, float y, float height) {
+	public void renderText(String text, float height, float x, float y) {
 		float currentX = x;
 		for (int i = 0; i < text.length(); i++) {
 			Texture texture = getCharacterTexture(text.charAt(i));
