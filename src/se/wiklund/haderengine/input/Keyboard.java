@@ -4,6 +4,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.glfw.GLFWKeyCallback;
 
+import se.wiklund.haderengine.Engine;
+
 public class Keyboard extends GLFWKeyCallback {
 	
 	public static boolean[] keys = new boolean[1024];
@@ -12,7 +14,7 @@ public class Keyboard extends GLFWKeyCallback {
 	@Override
 	public void invoke(long windowID, int key, int scancode, int action, int mods) {
 		if (key >= keys.length) {
-			System.err.println("Key index out of bounds: " + key + "!");
+			System.err.println(Engine.NAME_PREFIX + "Key index out of bounds: " + key + "!");
 			return;
 		}
 		

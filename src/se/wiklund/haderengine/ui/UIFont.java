@@ -1,4 +1,4 @@
-package se.wiklund.haderengine.graphics;
+package se.wiklund.haderengine.ui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import se.wiklund.haderengine.Engine;
+import se.wiklund.haderengine.graphics.Renderer;
+import se.wiklund.haderengine.graphics.Texture;
 import se.wiklund.haderengine.util.Loader;
 
 public class UIFont {

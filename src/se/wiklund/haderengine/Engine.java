@@ -21,7 +21,7 @@ public class Engine {
 	
 	public Engine(String title, boolean fullscreen, boolean vSync) {
 		if (!glfwInit()) {
-			System.err.println("Failed to initialize GLFW!");
+			System.err.println(NAME_PREFIX + "Failed to initialize GLFW!");
 			exit(-1);
 			return;
 		}
@@ -70,7 +70,7 @@ public class Engine {
 			window.close();
 		glfwTerminate();
 		if (code != 0)
-			System.out.println("Stopped with exit code " + code + "!");
+			System.out.println(NAME_PREFIX + "Stopped with exit code " + code + "!");
 		System.exit(code);
 	}
 	

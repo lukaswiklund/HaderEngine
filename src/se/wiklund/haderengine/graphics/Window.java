@@ -39,29 +39,28 @@ public class Window {
 	}
 	
 	private void createWindow(long oldID) {
-		width = Engine.SCREEN_SIZE.width;
-		height = Engine.SCREEN_SIZE.height;
+		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		final int height = fullscreen ? vidmode.height() : vidmode.height() / 2;
+		final int width = fullscreen ? vidmode.width() : height * 16 / 9;
 		long monitor = 0;
 		if (fullscreen) {
 			monitor = glfwGetPrimaryMonitor();
-		} else {
-			height /= 2;
-			width = height * 16 / 9;
 		}
-		
 		windowID = glfwCreateWindow(width, height, title, monitor, oldID);
 		if (oldID != 0) {
+			windows.remove(oldID);
 			glfwDestroyWindow(oldID);
 		}
 		if (windowID == 0) {
 			System.err.println(Engine.NAME_PREFIX + "Failed to create window!");
 			return;
 		}
-		
 		windows.put(windowID, this);
 		
-		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(windowID, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2);
+		
+		this.width = width;
+		this.height = height;
 		
 		glfwMakeContextCurrent(windowID);
 		

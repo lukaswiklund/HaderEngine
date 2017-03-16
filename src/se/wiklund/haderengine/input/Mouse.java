@@ -7,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
+import se.wiklund.haderengine.Engine;
+
 public class Mouse extends GLFWMouseButtonCallback {
 	
 	private static List<MouseButtonListener> listeners = new CopyOnWriteArrayList<>();
@@ -26,7 +28,7 @@ public class Mouse extends GLFWMouseButtonCallback {
 	
 	public static void addMouseButtonListener(MouseButtonListener listener) {
 		if (listeners.contains(listener)) {
-			System.err.println("Tried to add a MouseButtonListener that already exists!");
+			System.err.println(Engine.NAME_PREFIX + "Tried to add a MouseButtonListener that already exists!");
 			return;
 		}
 		listeners.add(listener);
@@ -34,7 +36,7 @@ public class Mouse extends GLFWMouseButtonCallback {
 	
 	public static void removeMouseButtonListener(MouseButtonListener listener) {
 		if (!listeners.contains(listener)) {
-			System.err.println("Tried to remove a MouseButtonListener that does not exist!");
+			System.err.println(Engine.NAME_PREFIX + "Tried to remove a MouseButtonListener that does not exist!");
 			return;
 		}
 		listeners.remove(listener);

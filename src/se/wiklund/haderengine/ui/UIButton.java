@@ -3,8 +3,8 @@ package se.wiklund.haderengine.ui;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import se.wiklund.haderengine.Engine;
 import se.wiklund.haderengine.graphics.Texture;
-import se.wiklund.haderengine.graphics.UIFont;
 import se.wiklund.haderengine.input.Cursor;
 import se.wiklund.haderengine.input.Mouse;
 import se.wiklund.haderengine.input.MouseButtonListener;
@@ -30,6 +30,7 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 		this.textOffsetY = (height - fontSize) / 2;
 		
 		Mouse.addMouseButtonListener(this);
+		EnabledUIComponents.setEnabled(this);
 	}
 	
 	@Override
@@ -40,7 +41,7 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 	
 	public void addButtonListener(UIButtonListener listener) {
 		if (listeners.contains(listener)) {
-			System.err.println("Tried to add a UIButtonListener that already exists!");
+			System.err.println(Engine.NAME_PREFIX + "Tried to add a UIButtonListener that already exists!");
 			return;
 		}
 		listeners.add(listener);
@@ -48,7 +49,7 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 	
 	public void removeButtonListener(UIButtonListener listener) {
 		if (!listeners.contains(listener)) {
-			System.err.println("Tried to remove a UIButtonListener that does not exist!");
+			System.err.println(Engine.NAME_PREFIX + "Tried to remove a UIButtonListener that does not exist!");
 			return;
 		}
 		listeners.remove(listener);
@@ -56,6 +57,8 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 
 	@Override
 	public void onMouseButtonDown(int button) {
+		if (!EnabledUIComponents.isEnabled(this)) return;
+		
 		if (Cursor.getTransform().intersects(getTransform())) {
 			for (UIButtonListener listener : listeners) {
 				listener.onButtonDown(this, button);
@@ -65,6 +68,8 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 
 	@Override
 	public void onMouseButtonUp(int button) {
+		if (!EnabledUIComponents.isEnabled(this)) return;
+		
 		if (Cursor.getTransform().intersects(getTransform())) {
 			for (UIButtonListener listener : listeners) {
 				listener.onButtonUp(this, button);

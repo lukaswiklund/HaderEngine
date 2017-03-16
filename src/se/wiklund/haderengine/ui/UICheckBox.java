@@ -3,8 +3,8 @@ package se.wiklund.haderengine.ui;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import se.wiklund.haderengine.Engine;
 import se.wiklund.haderengine.graphics.Texture;
-import se.wiklund.haderengine.graphics.UIFont;
 import se.wiklund.haderengine.input.Cursor;
 import se.wiklund.haderengine.input.Mouse;
 import se.wiklund.haderengine.input.MouseButtonListener;
@@ -29,6 +29,7 @@ public class UICheckBox extends UIComponent implements MouseButtonListener {
 		this.texUnchecked = texUnchecked;
 		
 		Mouse.addMouseButtonListener(this);
+		EnabledUIComponents.setEnabled(this);
 	}
 	
 	@Override
@@ -52,7 +53,7 @@ public class UICheckBox extends UIComponent implements MouseButtonListener {
 
 	public void addCheckBoxListener(UICheckBoxListener listener) {
 		if (listeners.contains(listener)) {
-			System.err.println("Tried to add a UICheckBoxListener that already exists!");
+			System.err.println(Engine.NAME_PREFIX + "Tried to add a UICheckBoxListener that already exists!");
 			return;
 		}
 		listeners.add(listener);
@@ -60,7 +61,7 @@ public class UICheckBox extends UIComponent implements MouseButtonListener {
 	
 	public void removeCheckBoxListener(UICheckBoxListener listener) {
 		if (!listeners.contains(listener)) {
-			System.err.println("Tried to remove a UICheckBoxListener that does not exist!");
+			System.err.println(Engine.NAME_PREFIX + "Tried to remove a UICheckBoxListener that does not exist!");
 			return;
 		}
 		listeners.remove(listener);
@@ -72,6 +73,8 @@ public class UICheckBox extends UIComponent implements MouseButtonListener {
 
 	@Override
 	public void onMouseButtonUp(int button) {
+		if (!EnabledUIComponents.isEnabled(this)) return;
+		
 		if (Cursor.getTransform().intersects(getTransform())) {
 			setChecked(!checked);
 			for (UICheckBoxListener listener : listeners) {

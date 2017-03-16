@@ -1,7 +1,5 @@
 package se.wiklund.haderengine.ui;
 
-import se.wiklund.haderengine.graphics.UIFont;
-
 public class UILabel extends UIComponent {
 	
 	private float rawX, rawY;
