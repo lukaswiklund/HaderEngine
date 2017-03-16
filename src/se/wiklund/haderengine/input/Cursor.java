@@ -20,8 +20,8 @@ public class Cursor extends GLFWCursorPosCallback {
 		int wWidth = window.getWidth();
 		int wHeight = window.getHeight();
 		if (wWidth <= 0 || wHeight <= 0) return;
-		float aspectX = (float) Engine.SCREEN_SIZE.width / window.getWidth();
-		float aspectY = (float) Engine.SCREEN_SIZE.height / window.getHeight();
+		float aspectX = ((float) Engine.SCREEN_SIZE.width / window.getWidth()) * ((float) Engine.WIDTH / Engine.SCREEN_SIZE.width);
+		float aspectY = ((float) Engine.SCREEN_SIZE.height / window.getHeight()) * ((float) Engine.HEIGHT / Engine.SCREEN_SIZE.height);
 		
 		float xt = (float) x * aspectX;
 		float yt = (float) Math.abs(Engine.HEIGHT - (y * aspectY));
