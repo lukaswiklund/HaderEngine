@@ -1,13 +1,13 @@
 package se.wiklund.haderengine.input;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.lwjgl.glfw.GLFWScrollCallback;
 
 public class Scroll extends GLFWScrollCallback {
 	
-	private static List<ScrollListener> listeners = new ArrayList<>();
+	private static List<ScrollListener> listeners = new CopyOnWriteArrayList<>();
 	
 	@Override
 	public void invoke(long windowID, double xOffset, double yOffset) {

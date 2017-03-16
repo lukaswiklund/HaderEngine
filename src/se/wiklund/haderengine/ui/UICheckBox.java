@@ -1,7 +1,7 @@
 package se.wiklund.haderengine.ui;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import se.wiklund.haderengine.graphics.Texture;
 import se.wiklund.haderengine.graphics.UIFont;
@@ -12,12 +12,11 @@ import se.wiklund.haderengine.ui.listener.UICheckBoxListener;
 
 public class UICheckBox extends UIComponent implements MouseButtonListener {
 	
-	private List<UICheckBoxListener> listeners = new ArrayList<>();
+	private List<UICheckBoxListener> listeners = new CopyOnWriteArrayList<>();
 	
 	private String text;
 	private UIFont font;
 	private float fontSize;
-	private float textX, textY;
 	private Texture texChecked, texUnchecked;
 	private boolean checked;
 	
@@ -26,8 +25,6 @@ public class UICheckBox extends UIComponent implements MouseButtonListener {
 		this.text = text;
 		this.font = font;
 		this.fontSize = fontSize;
-		this.textX = x + width + 10;
-		this.textY = y + (height - fontSize) / 2;
 		this.texChecked = texChecked;
 		this.texUnchecked = texUnchecked;
 		
@@ -38,6 +35,8 @@ public class UICheckBox extends UIComponent implements MouseButtonListener {
 	public void render() {
 		super.render();
 		if (font != null && text != null && !text.isEmpty()) {
+			float textX = getTransform().getX() + getTransform().getWidth() * 1.2f;
+			float textY = getTransform().getY() + (getTransform().getHeight() - fontSize) / 2;
 			font.renderText(text, fontSize, textX, textY);
 		}
 	}

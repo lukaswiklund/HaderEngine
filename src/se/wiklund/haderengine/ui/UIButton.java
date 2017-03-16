@@ -1,7 +1,7 @@
 package se.wiklund.haderengine.ui;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import se.wiklund.haderengine.graphics.Texture;
 import se.wiklund.haderengine.graphics.UIFont;
@@ -12,7 +12,7 @@ import se.wiklund.haderengine.ui.listener.UIButtonListener;
 
 public class UIButton extends UIComponent implements MouseButtonListener {
 	
-	private List<UIButtonListener> listeners = new ArrayList<>();
+	private List<UIButtonListener> listeners = new CopyOnWriteArrayList<>();
 	
 	private String text;
 	private UIFont font;

@@ -2,14 +2,14 @@ package se.wiklund.haderengine.input;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 public class Mouse extends GLFWMouseButtonCallback {
 	
-	private static List<MouseButtonListener> listeners = new ArrayList<>();
+	private static List<MouseButtonListener> listeners = new CopyOnWriteArrayList<>();
 	
 	@Override
 	public void invoke(long windowID, int button, int action, int mods) {
