@@ -9,12 +9,20 @@ import se.wiklund.haderengine.maths.Transform;
 public class Animator {
 
 	private List<AnimationObject> animationObjects = new CopyOnWriteArrayList<>();
-	
+
 	public void animate(Instance instance, Transform target, float seconds) {
+		if (target.getX() == Float.MAX_VALUE)
+			target.setX(instance.getTransform().getX());
+		if (target.getY() == Float.MAX_VALUE)
+			target.setY(instance.getTransform().getY());
+		if (target.getWidth() == Integer.MAX_VALUE)
+			target.setWidth(instance.getTransform().getWidth());
+		if (target.getHeight() == Integer.MAX_VALUE)
+			target.setHeight(instance.getTransform().getHeight());
 		AnimationObject object = new AnimationObject(instance, target, seconds);
 		animationObjects.add(object);
 	}
-	
+
 	public void animate(Instance instance, float x, float y, int width, int height, float seconds) {
 		AnimationObject object = new AnimationObject(instance, new Transform(x, y, width, height), seconds);
 		animationObjects.add(object);
@@ -25,7 +33,7 @@ public class Animator {
 			object.update(delta);
 		}
 	}
-	
+
 	public void cancelAll(boolean setAllToTarget) {
 		if (setAllToTarget) {
 			for (AnimationObject object : animationObjects) {
@@ -63,12 +71,12 @@ public class Animator {
 				animationObjects.remove(this);
 				return;
 			}
-			
+
 			INSTANCE.getTransform().move((float) (X_PER_SECOND * delta), (float) (Y_PER_SECOND * delta));
 			INSTANCE.getTransform().setWidth((int) (INSTANCE.getTransform().getWidth() + WIDTH_PER_SECOND * delta));
 			INSTANCE.getTransform().setHeight((int) (INSTANCE.getTransform().getHeight() + HEIGHT_PER_SECOND * delta));
 		}
-		
+
 		public void setToTarget() {
 			INSTANCE.getTransform().set(TARGET.getX(), TARGET.getY(), TARGET.getWidth(), TARGET.getHeight());
 		}
