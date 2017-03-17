@@ -14,6 +14,11 @@ public class Animator {
 		AnimationObject object = new AnimationObject(instance, target, seconds);
 		animationObjects.add(object);
 	}
+	
+	public void animate(Instance instance, float x, float y, int width, int height, float seconds) {
+		AnimationObject object = new AnimationObject(instance, new Transform(x, y, width, height), seconds);
+		animationObjects.add(object);
+	}
 
 	public void animateAll(double delta) {
 		for (AnimationObject object : animationObjects) {
