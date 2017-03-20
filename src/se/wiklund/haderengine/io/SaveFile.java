@@ -111,11 +111,22 @@ public class SaveFile {
 		configs.put(key, value);
 	}
 	
+	public void setProperty(String key, boolean value) {
+		configs.put(key, value + "");
+	}
+	
 	public String getProperty(String key, String defaultValue) {
 		if (!configs.containsKey(key)) {
 			configs.put(key, defaultValue);
 		}
 		return configs.get(key);
+	}
+	
+	public boolean getProperty(String key, boolean defaultValue) {
+		if (!configs.containsKey(key)) {
+			configs.put(key, defaultValue + "");
+		}
+		return configs.get(key).equalsIgnoreCase("true");
 	}
 
 	public static void setCompanyName(String companyName) {
