@@ -3,11 +3,6 @@ package se.wiklund.haderengine.graphics;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
-
-import org.lwjgl.BufferUtils;
 
 import se.wiklund.haderengine.util.Loader;
 
