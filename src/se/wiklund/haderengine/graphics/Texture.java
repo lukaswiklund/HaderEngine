@@ -3,6 +3,11 @@ package se.wiklund.haderengine.graphics;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+
+import org.lwjgl.BufferUtils;
 
 import se.wiklund.haderengine.util.Loader;
 
@@ -23,7 +28,15 @@ public class Texture {
 	public Texture(int color) {
 		this.width = 1;
 		this.height = 1;
-		int[] pixels = new int[] { color };
+		
+		int a = (color & 0xff000000) >> 24;
+		int r = (color & 0xff0000) >> 16;
+		int g = (color & 0xff00) >> 8;
+		int b = (color & 0xff);
+		
+		int pixel = a << 24 | b << 16 | g << 8 | r;
+		
+		int[] pixels = new int[] { pixel };
 		
 		registerTexture(pixels);
 	}
@@ -41,7 +54,7 @@ public class Texture {
 			int r = (rawPixels[i] & 0xff0000) >> 16;
 			int g = (rawPixels[i] & 0xff00) >> 8;
 			int b = (rawPixels[i] & 0xff);
-
+			
 			pixels[i] = a << 24 | b << 16 | g << 8 | r;
 		}
 		
