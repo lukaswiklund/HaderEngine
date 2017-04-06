@@ -10,7 +10,8 @@ public class Texture {
 
 	private int textureID;
 	private int width, height;
-
+	private int[] rawData, data;
+	
 	public Texture(String path) {
 		BufferedImage image = Loader.loadImage(path);
 		createTexture(image);
@@ -31,37 +32,38 @@ public class Texture {
 		
 		int pixel = a << 24 | b << 16 | g << 8 | r;
 		
-		int[] pixels = new int[] { pixel };
+		rawData = new int[] { pixel };
+		data = rawData.clone();
 		
-		registerTexture(pixels);
+		registerTexture(data);
 	}
 
 	private void createTexture(BufferedImage image) {
-		int[] rawPixels = null;
+		rawData = null;
 		width = image.getWidth();
 		height = image.getHeight();
-		rawPixels = new int[width * height];
-		image.getRGB(0, 0, width, height, rawPixels, 0, width);
+		rawData = new int[width * height];
+		image.getRGB(0, 0, width, height, rawData, 0, width);
 
-		int[] pixels = new int[width * height];
+		data = new int[width * height];
 		for (int i = 0; i < width * height; i++) {
-			int a = (rawPixels[i] & 0xff000000) >> 24;
-			int r = (rawPixels[i] & 0xff0000) >> 16;
-			int g = (rawPixels[i] & 0xff00) >> 8;
-			int b = (rawPixels[i] & 0xff);
+			int a = (rawData[i] & 0xff000000) >> 24;
+			int r = (rawData[i] & 0xff0000) >> 16;
+			int g = (rawData[i] & 0xff00) >> 8;
+			int b = (rawData[i] & 0xff);
 			
-			pixels[i] = a << 24 | b << 16 | g << 8 | r;
+			data[i] = a << 24 | b << 16 | g << 8 | r;
 		}
 		
-		registerTexture(pixels);
+		registerTexture(data);
 	}
 	
-	private void registerTexture(int[] pixels) {
+	private void registerTexture(int[] data) {
 		textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
@@ -79,5 +81,13 @@ public class Texture {
 
 	public int getHeight() {
 		return height;
+	}
+	
+	public int[] getRawData() {
+		return rawData;
+	}
+	
+	public int[] getData() {
+		return data;
 	}
 }

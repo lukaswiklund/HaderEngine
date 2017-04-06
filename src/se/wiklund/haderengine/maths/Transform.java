@@ -92,6 +92,10 @@ public class Transform {
 		return ((rw < rx || rw > tx) && (rh < ry || rh > ty) && (tw < tx || tw > rx) && (th < ty || th > ry));
 	}
 
+	public Transform copy() {
+		return new Transform(x, y, width, height);
+	}
+	
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ", " + width + ", " + height + ")";

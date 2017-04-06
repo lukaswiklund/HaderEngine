@@ -14,29 +14,16 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 	
 	private List<UIButtonListener> listeners = new CopyOnWriteArrayList<>();
 	
-	private String text;
-	private UIFont font;
-	private float fontSize;
-	private float textWidth;
-	private float textOffsetX, textOffsetY;
+	private UILabel label;
 	
-	public UIButton(String text, UIFont font, float fontSize, Texture background, float x, float y, int width, int height) {
+	public UIButton(String text, UIFont font, int fontSize, Texture background, float x, float y, int width, int height) {
 		super(background, x, y, width, height);
-		this.text = text;
-		this.font = font;
-		this.fontSize = fontSize;
-		this.textWidth = font.getTextWidth(text, fontSize);
-		this.textOffsetX = (width - textWidth) / 2;
-		this.textOffsetY = (height - fontSize) / 2;
+		this.label = new UILabel(text, font, fontSize, width / 2, height / 2, true);
+		
+		addSubview(label);
 		
 		Mouse.addMouseButtonListener(this);
 		EnabledUIComponents.setEnabled(this);
-	}
-	
-	@Override
-	public void render() {
-		super.render();
-		font.renderText(text, fontSize, getTransform().getX() + textOffsetX, getTransform().getY() + textOffsetY);
 	}
 	
 	public void addButtonListener(UIButtonListener listener) {
