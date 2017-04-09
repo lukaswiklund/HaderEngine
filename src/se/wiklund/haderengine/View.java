@@ -75,6 +75,18 @@ public class View {
 	protected ArrayList<View> getSubviews() {
 		return subviews;
 	}
+	
+	public void onKeyDown(int key) {
+		
+	}
+	
+	public void onKeyUp(int key) {
+		
+	}
+	
+	public void onKeyRepeat(int key) {
+		
+	}
 
 	public void onMouseButtonDown(int button) {
 		
