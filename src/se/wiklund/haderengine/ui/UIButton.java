@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import se.wiklund.haderengine.Engine;
 import se.wiklund.haderengine.View;
 import se.wiklund.haderengine.graphics.Texture;
+import se.wiklund.haderengine.input.InputEnabledViews;
 import se.wiklund.haderengine.maths.Transform;
 import se.wiklund.haderengine.ui.listener.UIButtonListener;
 

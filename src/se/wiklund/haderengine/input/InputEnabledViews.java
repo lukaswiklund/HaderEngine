@@ -1,4 +1,4 @@
-package se.wiklund.haderengine.ui;
+package se.wiklund.haderengine.input;
 
 import java.util.ArrayList;
 import java.util.HashMap;

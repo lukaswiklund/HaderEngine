@@ -4,8 +4,8 @@ import org.lwjgl.glfw.GLFW;
 
 import se.wiklund.haderengine.graphics.Renderer;
 import se.wiklund.haderengine.input.Cursor;
+import se.wiklund.haderengine.input.InputEnabledViews;
 import se.wiklund.haderengine.maths.Transform;
-import se.wiklund.haderengine.ui.InputEnabledViews;
 import se.wiklund.haderengine.ui.UIContextMenu;
 
 public class GameStateManager {
@@ -91,6 +91,7 @@ public class GameStateManager {
 		Transform viewT = view.getTransform();
 		offsetX += viewT.getX();
 		offsetY += viewT.getY();
+		
 		if (view.getTexture() != null) {
 			Renderer.render(view.getTexture(), offsetX, offsetY, viewT.getWidth(), viewT.getHeight());
 		}
@@ -98,7 +99,7 @@ public class GameStateManager {
 			renderView(subview);
 		}
     
-    offsetX -= viewT.getX();
+		offsetX -= viewT.getX();
 		offsetY -= viewT.getY();
 	}
 
@@ -135,6 +136,29 @@ public class GameStateManager {
 		}
 	}
 
+	private void callOnMouseDown(View view, int button) {
+		if (view.isHidden())
+			return;
+
+		if (InputEnabledViews.isEnabled(view)) {
+			Transform cursor = Cursor.getTransform();
+			Transform lclC = cursor.copy().move(-mouseDownOffsetX, -mouseDownOffsetY);
+			if (lclC.intersects(view.getTransform())) {
+				view.onMouseButtonDown(button);
+			}
+		}
+
+		mouseDownOffsetX += view.getTransform().getX();
+		mouseDownOffsetY += view.getTransform().getY();
+
+		for (View subview : view.getSubviews()) {
+			callOnMouseDown(subview, button);
+		}
+
+		mouseDownOffsetX -= view.getTransform().getX();
+		mouseDownOffsetY -= view.getTransform().getY();
+	}
+	
 	private void callOnMouseUp(View view, int button) {
 		if (view.isHidden())
 			return;
@@ -160,29 +184,6 @@ public class GameStateManager {
 		if (button == GLFW.GLFW_MOUSE_BUTTON_1 && view instanceof UIContextMenu) {
 			((UIContextMenu) view).hide();
 		}
-	}
-
-	private void callOnMouseDown(View view, int button) {
-		if (view.isHidden())
-			return;
-
-		if (InputEnabledViews.isEnabled(view)) {
-			Transform cursor = Cursor.getTransform();
-			Transform lclC = cursor.copy().move(-mouseDownOffsetX, -mouseDownOffsetY);
-			if (lclC.intersects(view.getTransform())) {
-				view.onMouseButtonDown(button);
-			}
-		}
-
-		mouseDownOffsetX += view.getTransform().getX();
-		mouseDownOffsetY += view.getTransform().getY();
-
-		for (View subview : view.getSubviews()) {
-			callOnMouseDown(subview, button);
-		}
-
-		mouseDownOffsetX -= view.getTransform().getX();
-		mouseDownOffsetY -= view.getTransform().getY();
 	}
 
 	public void setState(State state) {

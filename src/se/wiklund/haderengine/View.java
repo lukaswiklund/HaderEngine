@@ -2,6 +2,8 @@ package se.wiklund.haderengine;
 
 import java.util.ArrayList;
 
+import com.sun.istack.internal.NotNull;
+
 import se.wiklund.haderengine.graphics.Texture;
 import se.wiklund.haderengine.maths.Transform;
 
@@ -13,7 +15,7 @@ public class View {
 	private Transform transform;
 	private boolean hidden;
 	
-	public View(Texture texture, float x, float y) {
+	public View(@NotNull Texture texture, float x, float y) {
 		this(texture, new Transform(x, y, texture.getWidth(), texture.getHeight()));
 	}
 	
