@@ -1,6 +1,9 @@
 package se.wiklund.haderengine.ui;
 
-public class UILabel extends UIComponent {
+import se.wiklund.haderengine.View;
+import se.wiklund.haderengine.maths.Transform;
+
+public class UILabel extends View {
 	
 	private float rawX, rawY;
 	private String text;
@@ -8,7 +11,7 @@ public class UILabel extends UIComponent {
 	private boolean center;
 
 	public UILabel(String text, UIFont font, float fontSize, float x, float y, boolean center) {
-		super(null, x, y, 0, (int) fontSize);
+		super(null, new Transform(x, y, 0, (int) fontSize));
 		this.rawX = x;
 		this.rawY = y;
 		this.font = font;
@@ -16,11 +19,6 @@ public class UILabel extends UIComponent {
 		setText(text);
 	}
 	
-	@Override
-	public void render() {
-		font.renderText(text, getTransform().getHeight(), getTransform().getX(), getTransform().getY());
-	}
-
 	public String getText() {
 		return text;
 	}
@@ -32,6 +30,8 @@ public class UILabel extends UIComponent {
 			getTransform().setX(rawX - getTransform().getWidth() / 2);
 			getTransform().setY(rawY - getTransform().getHeight() / 2);
 		}
+		
+		setTexture(font.getTexture(text, getTransform().getHeight()));
 	}
 	
 	//TODO: Override Transform, so you change it if center is enabled

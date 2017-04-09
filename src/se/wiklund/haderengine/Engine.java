@@ -25,8 +25,8 @@ public class Engine {
 			exit(-1);
 			return;
 		}
-		window = new Window(title, fullscreen, vSync);
 		gsm = new GameStateManager();
+		window = new Window(title, fullscreen, vSync, gsm);
 	}
 	
 	public void start() {
@@ -34,7 +34,7 @@ public class Engine {
 		
 		while (!window.isCloseRequested()) {
 			long now = System.nanoTime();
-			double delta = (now - lastTime) / 1000000000D;
+			float delta = (now - lastTime) / 1000000000f;
 			lastTime = now;
 			
 			update(delta);
@@ -49,7 +49,7 @@ public class Engine {
 		exit();
 	}
 	
-	private void update(double delta) {
+	private void update(float delta) {
 		if (Keyboard.isKeyDown(GLFW_KEY_LEFT_ALT) && Keyboard.isKeyPressed(GLFW_KEY_ENTER)) {
 			window.setFullscreen(!window.isFullscreen());
 		}

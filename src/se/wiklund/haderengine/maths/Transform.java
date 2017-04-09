@@ -19,9 +19,11 @@ public class Transform {
 		this.height = height;
 	}
 
-	public void move(float dx, float dy) {
+	public Transform move(float dx, float dy) {
 		this.x += dx;
 		this.y += dy;
+		
+		return this;
 	}
 
 	public void setX(float x) {
@@ -92,6 +94,10 @@ public class Transform {
 		return ((rw < rx || rw > tx) && (rh < ry || rh > ty) && (tw < tx || tw > rx) && (th < ty || th > ry));
 	}
 
+	public Transform copy() {
+		return new Transform(x, y, width, height);
+	}
+	
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ", " + width + ", " + height + ")";

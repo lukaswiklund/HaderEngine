@@ -9,9 +9,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import se.wiklund.haderengine.Engine;
-import se.wiklund.haderengine.graphics.Renderer;
 import se.wiklund.haderengine.graphics.Texture;
 import se.wiklund.haderengine.util.Loader;
+import se.wiklund.haderengine.util.TextureCreator;
 
 public class UIFont {
 
@@ -36,25 +36,34 @@ public class UIFont {
 		this.antiAliased = antiAliased;
 	}
 	
-	public void renderText(String text, float height, float x, float y) {
-		float currentX = x;
+	public Texture getTexture(String text, int height) {
+		int textWidth = getTextWidth(text, height);
+		TextureCreator textureCreator = new TextureCreator(textWidth, height);
+		
+		int currentX = 0;
 		for (int i = 0; i < text.length(); i++) {
-			Texture texture = getCharacterTexture(text.charAt(i));
-			float width = texture.getWidth() * (height / texture.getHeight());
-			Renderer.render(texture, currentX, y, width, height);
+			char character = text.charAt(i);
+			Texture texture = getCharacterTexture(character);
+			int width = getCharacterWidth(character, height);
+			textureCreator.addTexture(texture, (int) currentX, 0, (int) width, height);
 			currentX += width;
 		}
+		return textureCreator.getTexture();
 	}
 
-	public float getTextWidth(String text, float height) {
-		float totalWidth = 0;
+	public int getTextWidth(String text, int height) {
+		int width = 0;
 		for (int i = 0; i < text.length(); i++) {
-			Texture texture = getCharacterTexture(text.charAt(i));
-			totalWidth += texture.getWidth() * (height / texture.getHeight());
+			width += getCharacterWidth(text.charAt(i), height);
 		}
-		return totalWidth;
+		return width;
 	}
-
+	
+	public int getCharacterWidth(char character, int height) {
+		Texture texture = getCharacterTexture(character);
+		return (int) (texture.getWidth() * ((float) height / texture.getHeight()));
+	}
+	
 	private Texture getCharacterTexture(char character) {
 		if (characters.containsKey(character))
 			return characters.get(character);

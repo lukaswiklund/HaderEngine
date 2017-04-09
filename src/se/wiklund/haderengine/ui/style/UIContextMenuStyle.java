@@ -8,11 +8,11 @@ public class UIContextMenuStyle {
     private UIContextMode mode;
     private Texture background;
     private final UIFont font;
-    private float fontSize;
+    private int fontSize;
     private int width;
     private int buttonHeight;
 
-    public UIContextMenuStyle(UIContextMode mode, Texture background, UIFont font, float fontSize, int width, int buttonHeight) {
+    public UIContextMenuStyle(UIContextMode mode, Texture background, UIFont font, int fontSize, int width, int buttonHeight) {
         this.mode = mode;
         this.background = background;
         this.font = font;
@@ -33,7 +33,7 @@ public class UIContextMenuStyle {
         return font;
     }
 
-    public float getFontSize() {
+    public int getFontSize() {
         return fontSize;
     }
 
