@@ -16,11 +16,11 @@ public class GameStateManager {
 	private float mouseUpOffsetX, mouseUpOffsetY;
 	private Engine engine;
 	private boolean altDown = false;
-	
+
 	public GameStateManager(Engine engine) {
 		this.engine = engine;
 	}
-	
+
 	public void update(float delta) {
 		if (state != null)
 			state.update(delta);
@@ -41,11 +41,11 @@ public class GameStateManager {
 		if (key == GLFW.GLFW_KEY_LEFT_ALT) {
 			altDown = true;
 		}
-		
+
 		if (key == GLFW.GLFW_KEY_ENTER && altDown) {
 			engine.window.setFullscreen(!engine.window.isFullscreen());
 		}
-		
+
 		state.onKeyDown(key);
 		for (View view : state.getSubviews()) {
 			callOnKeyDown(view, key);
@@ -88,17 +88,17 @@ public class GameStateManager {
 		if (view.isHidden())
 			return;
 
-		offsetX += view.getTransform().getX();
-		offsetY += view.getTransform().getY();
-
 		Transform t = view.getTransform();
+		offsetX += t.getX();
+		offsetY += t.getY();
+
 		Renderer.render(view.getTexture(), offsetX, offsetY, t.getWidth(), t.getHeight());
 		for (View subview : view.getSubviews()) {
 			renderView(subview);
 		}
 
-		offsetX -= view.getTransform().getX();
-		offsetY -= view.getTransform().getY();
+		offsetX -= t.getX();
+		offsetY -= t.getY();
 	}
 
 	private void callOnKeyDown(View view, int key) {
@@ -111,7 +111,7 @@ public class GameStateManager {
 			subview.onKeyDown(key);
 		}
 	}
-	
+
 	private void callOnKeyUp(View view, int key) {
 		if (view.isHidden())
 			return;
@@ -122,7 +122,7 @@ public class GameStateManager {
 			subview.onKeyUp(key);
 		}
 	}
-	
+
 	private void callOnKeyRepeat(View view, int key) {
 		if (view.isHidden())
 			return;
