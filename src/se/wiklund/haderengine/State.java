@@ -16,6 +16,18 @@ public abstract class State {
 		subviews.add(view);
 	}
 	
+	public void onKeyDown(int key) {
+		
+	}
+	
+	public void onKeyUp(int key) {
+		
+	}
+	
+	public void onKeyRepeat(int key) {
+		
+	}
+	
 	public void onMouseButtonDown(int button) {
 		
 	}

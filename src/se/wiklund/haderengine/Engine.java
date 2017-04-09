@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import se.wiklund.haderengine.graphics.Window;
-import se.wiklund.haderengine.input.Keyboard;
 
 public class Engine {
 	
@@ -25,7 +24,7 @@ public class Engine {
 			exit(-1);
 			return;
 		}
-		gsm = new GameStateManager();
+		gsm = new GameStateManager(this);
 		window = new Window(title, fullscreen, vSync, gsm);
 	}
 	
@@ -50,10 +49,6 @@ public class Engine {
 	}
 	
 	private void update(float delta) {
-		if (Keyboard.isKeyDown(GLFW_KEY_LEFT_ALT) && Keyboard.isKeyPressed(GLFW_KEY_ENTER)) {
-			window.setFullscreen(!window.isFullscreen());
-		}
-		
 		gsm.update(delta);
 	}
 	

@@ -81,7 +81,7 @@ public class Window {
 			}
 		});
 		
-		glfwSetKeyCallback(windowID, new Keyboard());
+		glfwSetKeyCallback(windowID, new Keyboard(gsm));
 		glfwSetCursorPosCallback(windowID, new Cursor(this));
 		glfwSetMouseButtonCallback(windowID, new Mouse(gsm));
 		glfwSetScrollCallback(windowID, new Scroll());

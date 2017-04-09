@@ -14,6 +14,12 @@ public class GameStateManager {
 	private float offsetX, offsetY;
 	private float mouseDownOffsetX, mouseDownOffsetY;
 	private float mouseUpOffsetX, mouseUpOffsetY;
+	private Engine engine;
+	private boolean altDown = false;
+
+	public GameStateManager(Engine engine) {
+		this.engine = engine;
+	}
 
 	public void update(float delta) {
 		if (state != null)
@@ -28,6 +34,35 @@ public class GameStateManager {
 		offsetY = 0;
 		for (View view : state.getSubviews()) {
 			renderView(view);
+		}
+	}
+
+	public void onKeyDown(int key) {
+		if (key == GLFW.GLFW_KEY_LEFT_ALT) {
+			altDown = true;
+		}
+
+		if (key == GLFW.GLFW_KEY_ENTER && altDown) {
+			engine.window.setFullscreen(!engine.window.isFullscreen());
+		}
+
+		state.onKeyDown(key);
+		for (View view : state.getSubviews()) {
+			callOnKeyDown(view, key);
+		}
+	}
+
+	public void onKeyUp(int key) {
+		state.onKeyUp(key);
+		for (View view : state.getSubviews()) {
+			callOnKeyUp(view, key);
+		}
+	}
+
+	public void onKeyRepeat(int key) {
+		state.onKeyRepeat(key);
+		for (View view : state.getSubviews()) {
+			callOnKeyRepeat(view, key);
 		}
 	}
 
@@ -61,9 +96,42 @@ public class GameStateManager {
 		for (View subview : view.getSubviews()) {
 			renderView(subview);
 		}
-
-		offsetX -= viewT.getX();
+    
+    offsetX -= viewT.getX();
 		offsetY -= viewT.getY();
+	}
+
+	private void callOnKeyDown(View view, int key) {
+		if (view.isHidden())
+			return;
+
+		if (InputEnabledViews.isEnabled(view))
+			view.onKeyDown(key);
+		for (View subview : view.getSubviews()) {
+			subview.onKeyDown(key);
+		}
+	}
+
+	private void callOnKeyUp(View view, int key) {
+		if (view.isHidden())
+			return;
+
+		if (InputEnabledViews.isEnabled(view))
+			view.onKeyUp(key);
+		for (View subview : view.getSubviews()) {
+			subview.onKeyUp(key);
+		}
+	}
+
+	private void callOnKeyRepeat(View view, int key) {
+		if (view.isHidden())
+			return;
+
+		if (InputEnabledViews.isEnabled(view))
+			view.onKeyRepeat(key);
+		for (View subview : view.getSubviews()) {
+			subview.onKeyRepeat(key);
+		}
 	}
 
 	private void callOnMouseUp(View view, int button) {
@@ -87,12 +155,12 @@ public class GameStateManager {
 
 		mouseUpOffsetX -= view.getTransform().getX();
 		mouseUpOffsetY -= view.getTransform().getY();
-		
+
 		if (button == GLFW.GLFW_MOUSE_BUTTON_1 && view instanceof UIContextMenu) {
 			((UIContextMenu) view).hide();
 		}
 	}
-	
+
 	private void callOnMouseDown(View view, int button) {
 		if (view.isHidden())
 			return;
