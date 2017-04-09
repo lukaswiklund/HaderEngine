@@ -87,18 +87,18 @@ public class GameStateManager {
 	private void renderView(View view) {
 		if (view.isHidden())
 			return;
+		
+		Transform viewT = view.getTransform();
+		offsetX += viewT.getX();
+		offsetY += viewT.getY();
 
-		Transform t = view.getTransform();
-		offsetX += t.getX();
-		offsetY += t.getY();
-
-		Renderer.render(view.getTexture(), offsetX, offsetY, t.getWidth(), t.getHeight());
+		Renderer.render(view.getTexture(), offsetX, offsetY, viewT.getWidth(), viewT.getHeight());
 		for (View subview : view.getSubviews()) {
 			renderView(subview);
 		}
-
-		offsetX -= t.getX();
-		offsetY -= t.getY();
+    
+    offsetX -= viewT.getX();
+		offsetY -= viewT.getY();
 	}
 
 	private void callOnKeyDown(View view, int key) {
