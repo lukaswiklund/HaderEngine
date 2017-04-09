@@ -4,26 +4,24 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import se.wiklund.haderengine.Engine;
+import se.wiklund.haderengine.View;
 import se.wiklund.haderengine.graphics.Texture;
-import se.wiklund.haderengine.input.Cursor;
-import se.wiklund.haderengine.input.Mouse;
-import se.wiklund.haderengine.input.MouseButtonListener;
+import se.wiklund.haderengine.maths.Transform;
 import se.wiklund.haderengine.ui.listener.UIButtonListener;
 
-public class UIButton extends UIComponent implements MouseButtonListener {
+public class UIButton extends View {
 	
 	private List<UIButtonListener> listeners = new CopyOnWriteArrayList<>();
 	
 	private UILabel label;
 	
-	public UIButton(String text, UIFont font, int fontSize, Texture background, float x, float y, int width, int height) {
-		super(background, x, y, width, height);
-		this.label = new UILabel(text, font, fontSize, width / 2, height / 2, true);
+	public UIButton(String text, UIFont font, int fontSize, Texture background, Transform transform) {
+		super(background, transform);
+		this.label = new UILabel(text, font, fontSize, transform.getWidth() / 2, transform.getHeight() / 2, true);
 		
 		addSubview(label);
 		
-		Mouse.addMouseButtonListener(this);
-		EnabledUIComponents.setEnabled(this);
+		InputEnabledViews.setEnabled(this);
 	}
 	
 	public void addButtonListener(UIButtonListener listener) {
@@ -41,26 +39,22 @@ public class UIButton extends UIComponent implements MouseButtonListener {
 		}
 		listeners.remove(listener);
 	}
-
+	
 	@Override
 	public void onMouseButtonDown(int button) {
-		if (!EnabledUIComponents.isEnabled(this)) return;
+		if (!InputEnabledViews.isEnabled(this)) return;
 		
-		if (Cursor.getTransform().intersects(getTransform())) {
-			for (UIButtonListener listener : listeners) {
-				listener.onButtonDown(this, button);
-			}
+		for (UIButtonListener listener : listeners) {
+			listener.onButtonDown(this, button);
 		}
 	}
-
+	
 	@Override
 	public void onMouseButtonUp(int button) {
-		if (!EnabledUIComponents.isEnabled(this)) return;
+		if (!InputEnabledViews.isEnabled(this)) return;
 		
-		if (Cursor.getTransform().intersects(getTransform())) {
-			for (UIButtonListener listener : listeners) {
-				listener.onButtonUp(this, button);
-			}
+		for (UIButtonListener listener : listeners) {
+			listener.onButtonUp(this, button);
 		}
 	}
 }

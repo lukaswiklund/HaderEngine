@@ -3,28 +3,28 @@ package se.wiklund.haderengine.graphics;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import se.wiklund.haderengine.Instance;
+import se.wiklund.haderengine.View;
 import se.wiklund.haderengine.maths.Transform;
 
 public class Animator {
 
 	private List<AnimationObject> animationObjects = new CopyOnWriteArrayList<>();
 
-	public void animate(Instance instance, Transform target, float seconds) {
+	public void animate(View view, Transform target, float seconds) {
 		if (target.getX() == Float.MAX_VALUE)
-			target.setX(instance.getTransform().getX());
+			target.setX(view.getTransform().getX());
 		if (target.getY() == Float.MAX_VALUE)
-			target.setY(instance.getTransform().getY());
+			target.setY(view.getTransform().getY());
 		if (target.getWidth() == Integer.MAX_VALUE)
-			target.setWidth(instance.getTransform().getWidth());
+			target.setWidth(view.getTransform().getWidth());
 		if (target.getHeight() == Integer.MAX_VALUE)
-			target.setHeight(instance.getTransform().getHeight());
-		AnimationObject object = new AnimationObject(instance, target, seconds);
+			target.setHeight(view.getTransform().getHeight());
+		AnimationObject object = new AnimationObject(view, target, seconds);
 		animationObjects.add(object);
 	}
 
-	public void animate(Instance instance, float x, float y, int width, int height, float seconds) {
-		AnimationObject object = new AnimationObject(instance, new Transform(x, y, width, height), seconds);
+	public void animate(View view, float x, float y, int width, int height, float seconds) {
+		AnimationObject object = new AnimationObject(view, new Transform(x, y, width, height), seconds);
 		animationObjects.add(object);
 	}
 
@@ -45,19 +45,19 @@ public class Animator {
 
 	private class AnimationObject {
 
-		private final Instance INSTANCE;
+		private final View VIEW;
 		private final Transform TARGET;
 		private final float SECONDS;
 		private final float X_PER_SECOND, Y_PER_SECOND, WIDTH_PER_SECOND, HEIGHT_PER_SECOND;
 
 		private float elapsed;
 
-		public AnimationObject(Instance instance, Transform target, float seconds) {
-			this.INSTANCE = instance;
+		public AnimationObject(View view, Transform target, float seconds) {
+			this.VIEW = view;
 			this.TARGET = target;
 			this.SECONDS = seconds;
 
-			Transform transform = instance.getTransform();
+			Transform transform = view.getTransform();
 			X_PER_SECOND = (target.getX() - transform.getX()) / seconds;
 			Y_PER_SECOND = (target.getY() - transform.getY()) / seconds;
 			WIDTH_PER_SECOND = (target.getWidth() - transform.getWidth()) / 2;
@@ -72,13 +72,13 @@ public class Animator {
 				return;
 			}
 
-			INSTANCE.getTransform().move((float) (X_PER_SECOND * delta), (float) (Y_PER_SECOND * delta));
-			INSTANCE.getTransform().setWidth((int) (INSTANCE.getTransform().getWidth() + WIDTH_PER_SECOND * delta));
-			INSTANCE.getTransform().setHeight((int) (INSTANCE.getTransform().getHeight() + HEIGHT_PER_SECOND * delta));
+			VIEW.getTransform().move((float) (X_PER_SECOND * delta), (float) (Y_PER_SECOND * delta));
+			VIEW.getTransform().setWidth((int) (VIEW.getTransform().getWidth() + WIDTH_PER_SECOND * delta));
+			VIEW.getTransform().setHeight((int) (VIEW.getTransform().getHeight() + HEIGHT_PER_SECOND * delta));
 		}
 
 		public void setToTarget() {
-			INSTANCE.getTransform().set(TARGET.getX(), TARGET.getY(), TARGET.getWidth(), TARGET.getHeight());
+			VIEW.getTransform().set(TARGET.getX(), TARGET.getY(), TARGET.getWidth(), TARGET.getHeight());
 		}
 	}
 }

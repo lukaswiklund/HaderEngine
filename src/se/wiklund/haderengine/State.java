@@ -16,6 +16,14 @@ public abstract class State {
 		subviews.add(view);
 	}
 	
+	public void onMouseButtonDown(int button) {
+		
+	}
+
+	public void onMouseButtonUp(int button) {
+		
+	}
+	
 	public void removeSubview(View view) {
 		if (!subviews.contains(view)) {
 			System.err.println(Engine.NAME_PREFIX + "Tried to remove a subview that isn't added!");

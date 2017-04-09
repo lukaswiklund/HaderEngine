@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import se.wiklund.haderengine.Engine;
+import se.wiklund.haderengine.View;
 import se.wiklund.haderengine.graphics.Texture;
-import se.wiklund.haderengine.input.Cursor;
-import se.wiklund.haderengine.input.Mouse;
-import se.wiklund.haderengine.input.MouseButtonListener;
+import se.wiklund.haderengine.maths.Transform;
 import se.wiklund.haderengine.ui.listener.UICheckBoxListener;
 
-public class UICheckBox extends UIComponent implements MouseButtonListener {
+public class UICheckBox extends View {
 
 	private List<UICheckBoxListener> listeners = new CopyOnWriteArrayList<>();
 
@@ -18,19 +17,18 @@ public class UICheckBox extends UIComponent implements MouseButtonListener {
 	private Texture texChecked, texUnchecked;
 	private boolean checked;
 
-	public UICheckBox(String text, UIFont font, int fontSize, Texture texUnchecked, Texture texChecked, float x, float y,
-			int width, int height) {
-		super(texUnchecked, x, y, width, height);
-		this.label = new UILabel(text, font, fontSize, x + width * 1.2f, y + (height - fontSize) / 2, false);
+	public UICheckBox(String text, UIFont font, int fontSize, Texture texUnchecked, Texture texChecked, Transform transform) {
+		super(texUnchecked, transform);
+		this.label = new UILabel(text, font, fontSize, transform.getX() + transform.getWidth() * 1.2f,
+				transform.getY() + (transform.getHeight() - fontSize) / 2, false);
 		this.texChecked = texChecked;
 		this.texUnchecked = texUnchecked;
-		
+
 		addSubview(label);
 
-		Mouse.addMouseButtonListener(this);
-		EnabledUIComponents.setEnabled(this);
+		InputEnabledViews.setEnabled(this);
 	}
-	
+
 	public boolean isChecked() {
 		return checked;
 	}
@@ -55,21 +53,12 @@ public class UICheckBox extends UIComponent implements MouseButtonListener {
 		}
 		listeners.remove(listener);
 	}
-
-	@Override
-	public void onMouseButtonDown(int button) {
-	}
-
+	
 	@Override
 	public void onMouseButtonUp(int button) {
-		if (!EnabledUIComponents.isEnabled(this))
-			return;
-
-		if (Cursor.getTransform().intersects(getTransform())) {
-			setChecked(!checked);
-			for (UICheckBoxListener listener : listeners) {
-				listener.onValueChange(this, checked, button);
-			}
+		setChecked(!checked);
+		for (UICheckBoxListener listener : listeners) {
+			listener.onValueChange(this, checked, button);
 		}
 	}
 }

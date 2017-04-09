@@ -19,9 +19,11 @@ public class Transform {
 		this.height = height;
 	}
 
-	public void move(float dx, float dy) {
+	public Transform move(float dx, float dy) {
 		this.x += dx;
 		this.y += dy;
+		
+		return this;
 	}
 
 	public void setX(float x) {

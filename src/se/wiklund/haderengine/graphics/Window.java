@@ -10,6 +10,7 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 
 import se.wiklund.haderengine.Engine;
+import se.wiklund.haderengine.GameStateManager;
 import se.wiklund.haderengine.input.Cursor;
 import se.wiklund.haderengine.input.Keyboard;
 import se.wiklund.haderengine.input.Mouse;
@@ -24,11 +25,13 @@ public class Window {
 	private boolean vSync;
 	private long windowID;
 	private int width, height;
+	private GameStateManager gsm;
 	
-	public Window(String title, boolean fullscreen, boolean vSync) {
+	public Window(String title, boolean fullscreen, boolean vSync, GameStateManager gsm) {
 		this.title = title;
 		this.fullscreen = fullscreen;
 		this.vSync = vSync;
+		this.gsm = gsm;
 		
 		createWindow(0);
 	}
@@ -80,7 +83,7 @@ public class Window {
 		
 		glfwSetKeyCallback(windowID, new Keyboard());
 		glfwSetCursorPosCallback(windowID, new Cursor(this));
-		glfwSetMouseButtonCallback(windowID, new Mouse());
+		glfwSetMouseButtonCallback(windowID, new Mouse(gsm));
 		glfwSetScrollCallback(windowID, new Scroll());
 		
 		GL.createCapabilities();

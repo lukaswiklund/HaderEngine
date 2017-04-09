@@ -13,6 +13,10 @@ public class View {
 	private Transform transform;
 	private boolean hidden;
 	
+	public View(Texture texture, float x, float y) {
+		this(texture, new Transform(x, y, texture.getWidth(), texture.getHeight()));
+	}
+	
 	public View(Texture texture, Transform transform) {
 		this.texture = texture;
 		this.transform = transform;
@@ -68,7 +72,15 @@ public class View {
 		this.hidden = hidden;
 	}
 	
-	ArrayList<View> getSubviews() {
+	protected ArrayList<View> getSubviews() {
 		return subviews;
+	}
+
+	public void onMouseButtonDown(int button) {
+		
+	}
+
+	public void onMouseButtonUp(int button) {
+		
 	}
 }

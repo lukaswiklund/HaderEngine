@@ -25,8 +25,8 @@ public class Engine {
 			exit(-1);
 			return;
 		}
-		window = new Window(title, fullscreen, vSync);
 		gsm = new GameStateManager();
+		window = new Window(title, fullscreen, vSync, gsm);
 	}
 	
 	public void start() {
