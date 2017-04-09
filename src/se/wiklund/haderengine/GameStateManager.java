@@ -52,18 +52,18 @@ public class GameStateManager {
 	private void renderView(View view) {
 		if (view.isHidden())
 			return;
+		
+		Transform viewT = view.getTransform();
+		offsetX += viewT.getX();
+		offsetY += viewT.getY();
 
-		offsetX += view.getTransform().getX();
-		offsetY += view.getTransform().getY();
-
-		Transform t = view.getTransform();
-		Renderer.render(view.getTexture(), offsetX, offsetY, t.getWidth(), t.getHeight());
+		Renderer.render(view.getTexture(), offsetX, offsetY, viewT.getWidth(), viewT.getHeight());
 		for (View subview : view.getSubviews()) {
 			renderView(subview);
 		}
 
-		offsetX -= view.getTransform().getX();
-		offsetY -= view.getTransform().getY();
+		offsetX -= viewT.getX();
+		offsetY -= viewT.getY();
 	}
 
 	private void callOnMouseUp(View view, int button) {
