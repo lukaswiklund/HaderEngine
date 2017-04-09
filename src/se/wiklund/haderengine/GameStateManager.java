@@ -91,8 +91,9 @@ public class GameStateManager {
 		Transform viewT = view.getTransform();
 		offsetX += viewT.getX();
 		offsetY += viewT.getY();
-
-		Renderer.render(view.getTexture(), offsetX, offsetY, viewT.getWidth(), viewT.getHeight());
+		if (view.getTexture() != null) {
+			Renderer.render(view.getTexture(), offsetX, offsetY, viewT.getWidth(), viewT.getHeight());
+		}
 		for (View subview : view.getSubviews()) {
 			renderView(subview);
 		}
