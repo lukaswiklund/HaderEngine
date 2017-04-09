@@ -19,8 +19,8 @@ public class UICheckBox extends View {
 
 	public UICheckBox(String text, UIFont font, int fontSize, Texture texUnchecked, Texture texChecked, Transform transform) {
 		super(texUnchecked, transform);
-		this.label = new UILabel(text, font, fontSize, transform.getX() + transform.getWidth() * 1.2f,
-				transform.getY() + (transform.getHeight() - fontSize) / 2, false);
+		this.label = new UILabel(text, font, fontSize, transform.getWidth() * 1.2f, (transform.getHeight() - fontSize) / 2,
+				false);
 		this.texChecked = texChecked;
 		this.texUnchecked = texUnchecked;
 
@@ -53,7 +53,7 @@ public class UICheckBox extends View {
 		}
 		listeners.remove(listener);
 	}
-	
+
 	@Override
 	public void onMouseButtonUp(int button) {
 		setChecked(!checked);
