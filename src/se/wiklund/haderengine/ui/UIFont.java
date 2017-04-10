@@ -37,6 +37,10 @@ public class UIFont {
 	}
 	
 	public Texture getTexture(String text, int height) {
+		if (text.length() <= 0) {
+			return new Texture(0, 0, height);
+		}
+		
 		int textWidth = getTextWidth(text, height);
 		TextureCreator textureCreator = new TextureCreator(textWidth, height);
 		
