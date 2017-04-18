@@ -1,50 +1,12 @@
 package se.wiklund.haderengine;
 
-import java.util.ArrayList;
+import se.wiklund.haderengine.maths.Transform;
 
-public abstract class State {
+public abstract class State extends View {
 	
-	private ArrayList<View> subviews = new ArrayList<>();
-	
+	public State() {
+		super(null, new Transform(0, 0, Engine.WIDTH, Engine.HEIGHT));
+	}
+
 	public abstract void update(float delta);
-	
-	public void addSubview(View view) {
-		if (subviews.contains(view)) {
-			System.err.println(Engine.NAME_PREFIX + "Tried to add a subview that is already added!");
-			return;
-		}
-		subviews.add(view);
-	}
-	
-	public void removeSubview(View view) {
-		if (!subviews.contains(view)) {
-			System.err.println(Engine.NAME_PREFIX + "Tried to remove a subview that isn't added!");
-			return;
-		}
-		subviews.remove(view);
-	}
-	
-	protected ArrayList<View> getSubviews() {
-		return subviews;
-	}
-	
-	public void onKeyDown(int key) {
-		
-	}
-	
-	public void onKeyUp(int key) {
-		
-	}
-	
-	public void onKeyRepeat(int key) {
-		
-	}
-	
-	public void onMouseButtonDown(int button) {
-		
-	}
-
-	public void onMouseButtonUp(int button) {
-		
-	}
 }
