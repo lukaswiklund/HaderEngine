@@ -41,7 +41,7 @@ public class View {
 			System.err.println(Engine.NAME_PREFIX + "Tried to remove a subview that isn't added!");
 			return;
 		}
-		subviews.add(view);
+		subviews.remove(view);
 	}
 	
 	public Texture getTexture() {

@@ -16,6 +16,18 @@ public abstract class State {
 		subviews.add(view);
 	}
 	
+	public void removeSubview(View view) {
+		if (!subviews.contains(view)) {
+			System.err.println(Engine.NAME_PREFIX + "Tried to remove a subview that isn't added!");
+			return;
+		}
+		subviews.remove(view);
+	}
+	
+	protected ArrayList<View> getSubviews() {
+		return subviews;
+	}
+	
 	public void onKeyDown(int key) {
 		
 	}
@@ -34,17 +46,5 @@ public abstract class State {
 
 	public void onMouseButtonUp(int button) {
 		
-	}
-	
-	public void removeSubview(View view) {
-		if (!subviews.contains(view)) {
-			System.err.println(Engine.NAME_PREFIX + "Tried to remove a subview that isn't added!");
-			return;
-		}
-		subviews.add(view);
-	}
-	
-	ArrayList<View> getSubviews() {
-		return subviews;
 	}
 }
