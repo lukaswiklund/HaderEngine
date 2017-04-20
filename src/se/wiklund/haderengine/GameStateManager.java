@@ -53,9 +53,6 @@ public class GameStateManager {
 	}
 
 	public void onKeyUp(int key) {
-		if (key == GLFW.GLFW_KEY_LEFT_ALT) {
-			altDown = false;
-		}
 		state.onKeyUp(key);
 		for (View view : state.getSubviews()) {
 			callOnKeyUp(view, key);
