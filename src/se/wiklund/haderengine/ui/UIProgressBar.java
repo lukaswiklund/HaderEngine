@@ -42,7 +42,7 @@ public class UIProgressBar extends View {
 		creator.addTexture(style.getBackgroundTexture(), style.getFrameSizeX(), style.getFrameSizeY(), barWidth, barHeight);
 
 		float percentage = (progress - minValue) / ((maxValue - minValue) / 100);
-		int filledBarWidth = (int) (barWidth * percentage);
+		int filledBarWidth = (int) (barWidth * (percentage / 100));
 		creator.addTexture(style.getForegroundTexture(), style.getFrameSizeX(), style.getFrameSizeY(), filledBarWidth, barHeight);
 
 		setTexture(creator.getTexture());
